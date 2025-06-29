@@ -1,0 +1,443 @@
+
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "g7ROjDaoTQwJ",
+        "outputId": "3a9dd2f3-a3b3-4d5a-fecb-f77177e4c1f5"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<sqlite3.Cursor at 0x7cb071a30dc0>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 1
+        }
+      ],
+      "source": [
+        "#Creating a database named edu_institute\n",
+        "import sqlite3\n",
+        "\n",
+        "# Connect to an in-memory SQLite database\n",
+        "conn = sqlite3.connect(':memory:')\n",
+        "cursor = conn.cursor()\n",
+        "\n",
+        "# Create the database and table\n",
+        "cursor.execute(\"CREATE TABLE students (student_id INTEGER PRIMARY KEY, name TEXT, age INTEGER, gender TEXT, enrollment_date TEXT, program TEXT);\")\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Created temporary db above with the table called students and stores the information"
+      ],
+      "metadata": {
+        "id": "ZblMxzjKYubY"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Inserting data into the table\n",
+        "cursor.executemany('''\n",
+        "INSERT INTO students (student_id, name, age, gender, enrollment_date, program)\n",
+        "VALUES (?, ?, ?, ?, ?, ?)\n",
+        "''', [\n",
+        "    (1, Chris Roberts', 24, 'M', '2023-06-25', 'Data Science'),\n",
+        "    (2, 'Brenda Akinyi', 28, 'F', '2022-07-21', 'Computer Science'),\n",
+        "    (3, 'Sam Doe', 22, 'M', '2022-1-17', 'Data Analysis'),\n",
+        "    (4, 'Dan Nyamae', 25, 'M', '2019-7-14', 'Business Management'),\n",
+        "    (5, 'Lilian Kioko', 33, 'F', '2015-06-10', 'Data Science')\n",
+        "])\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UrkASnWyY-GA",
+        "outputId": "4073feea-2919-438d-ef23-e2eb91a3823e"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<sqlite3.Cursor at 0x7cb071a30dc0>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Data Insertion above of 5 students: The name, age, gender, Enrollment date and program"
+      ],
+      "metadata": {
+        "id": "YNWR6aoLpmMU"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Select all students from the \"Data Science\" program\n",
+        "cursor.execute(\"SELECT * FROM students WHERE program = 'Data Science';\")\n",
+        "result = cursor.fetchall()\n",
+        "for row in result:\n",
+        "    print(row)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "GdubIwOJkrJL",
+        "outputId": "2ca61a4b-6908-4667-b6ca-51ca92196182"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(1, 'Chris Roberts', 24, 'M', '2023-06-25', 'Data Science')\n",
+            "(5, 'Lilian Kioko', 33, 'F', '2015-06-10', 'Data Science')\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Select all students from the \"Data Science\" program"
+      ],
+      "metadata": {
+        "id": "Sr6Pg6WLqtl9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Count the total number of studentsand output total\n",
+        "cursor.execute(\"SELECT COUNT(*) AS 'Total Students' FROM students;\")\n",
+        "result = cursor.fetchone()\n",
+        "print(f\"Total Students: {result[0]}\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "WmLEEUsXl0Yu",
+        "outputId": "499a5f19-a5bd-4094-fe5c-cd784d2f6814"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Total Students: 5\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "query to find the total number of students and display it as Total"
+      ],
+      "metadata": {
+        "id": "MYXcuTMhqX_2"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Display today's date\n",
+        "cursor.execute(\"SELECT DATE('now') AS \\\"Today's Date\\\";\")\n",
+        "result = cursor.fetchone()\n",
+        "print(f\"Today's Date: {result[0]}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gSmAyxtvl6C8",
+        "outputId": "02cb8149-2b4b-4eb0-8ad6-97fa76c23d2b"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Today's Date: 2025-06-29\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Display today's date"
+      ],
+      "metadata": {
+        "id": "fAC27xysrBkS"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Display names in uppercase\n",
+        "cursor.execute(\"SELECT UPPER(name) AS 'Student Name', enrollment_date AS 'Enrollment Date' FROM students;\")\n",
+        "result = cursor.fetchall()\n",
+        "for row in result:\n",
+        "    print(row)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cIEeKqJymdWh",
+        "outputId": "ef12a269-3857-48c4-aa38-5c8a1de3aa58"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "('CHRIS ROBERTS', '2023-06-25')\n",
+            "('BRENDA AKINYI', '2022-07-21')\n",
+            "('SAM DOE', '2022-1-17')\n",
+            "('DAN NYAMAE', '2019-7-14')\n",
+            "('LILIAN KIOKO', '2015-06-10')\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "query to select the student names and their enrolment dates, but\n",
+        "display the name column in uppercase."
+      ],
+      "metadata": {
+        "id": "aR6ugh6Urm7A"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Count the number of students in each program\n",
+        "cursor.execute('''\n",
+        "SELECT program, COUNT(*) AS 'Number of Students'\n",
+        "FROM students\n",
+        "GROUP BY program\n",
+        "ORDER BY COUNT(*) DESC;\n",
+        "''')\n",
+        "result = cursor.fetchall()\n",
+        "for row in result:\n",
+        "    print(row)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Tym7pAPsnDvh",
+        "outputId": "d244251b-1f7a-4f64-ad0c-5fdb471be72c"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "('Data Science', 2)\n",
+            "('Data Analysis', 1)\n",
+            "('Computer Science', 1)\n",
+            "('Business Management', 1)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "query to count the number of students in each program and display the\n",
+        "results in descending order of count."
+      ],
+      "metadata": {
+        "id": "-mv2tNugrvi8"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Find the youngest student\n",
+        "cursor.execute('''\n",
+        "SELECT name, age FROM students WHERE age = (SELECT MIN(age) FROM students);\n",
+        "''')\n",
+        "result = cursor.fetchone()\n",
+        "print(f\"Youngest Student: {result}\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "jjeajh1EnLj0",
+        "outputId": "cc85452a-2b53-4dcf-ca8f-7f909f1a1341"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Youngest Student: ('Saint Jhn', 22)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "query to find the youngest student's name and age."
+      ],
+      "metadata": {
+        "id": "mAaPZLkrso4J"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!git config --global user.email \"earl.aduma@strathmore.edu\"\n",
+        "!git config --global user.name \"Earladuma\"\n"
+      ],
+      "metadata": {
+        "id": "n5zr1jGFnP48"
+      },
+      "execution_count": 8,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!mkdir Sqlassignment_new\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "dyC-xSwDzRvC"
+      },
+      "execution_count": 24,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!git clone https://github.com/Earladuma/Sqlassignment.git Sqlassignment_new\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "d85MskAY0RNs",
+        "outputId": "1697c062-26c0-47b6-e3d5-7a8085de48e1"
+      },
+      "execution_count": 25,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cloning into 'Sqlassignment_new'...\n",
+            "warning: You appear to have cloned an empty repository.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%cd Sqlassignment_new\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "MsrHj0cx4u_y",
+        "outputId": "6d0e41b7-bb15-474f-acaa-05ec3647967d"
+      },
+      "execution_count": 26,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/content/Sqlassignment_new\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!ls /content/\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gTBbC5cm6Ife",
+        "outputId": "a93914ad-4430-4405-bc3c-674f526d40fd"
+      },
+      "execution_count": 30,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "sample_data  Sqlassignment  Sqlassignment_new  Sqlassignment_old\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!ls /content/Sqlassignment_new\n"
+      ],
+      "metadata": {
+        "id": "ZeM1-vdD6oBg"
+      },
+      "execution_count": 32,
+      "outputs": []
+    }
+  ]
+}
